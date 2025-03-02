@@ -34,30 +34,7 @@
             margin: 0 1rem;
         }
 
-        // Navigation buttons
-        button {
-            background: none;
-            border: none;
-            color: var(--fg);  // Changed from primary to normal text
-            cursor: pointer;
-            padding: 0;
-            font-family: var(--font-stack);
-
-            // Terminal-style navigation arrows
-            &.prev::before { content: "[<]"; }
-            &.next::before { content: "[>]"; }
-
-            // Button states
-            &:hover {
-                text-decoration: underline;
-            }
-
-            &:disabled {
-                color: var(--fg-dim);
-                cursor: not-allowed;
-                text-decoration: none;
-            }
-        }
+        
     }
 
     // Hide navigation for single images

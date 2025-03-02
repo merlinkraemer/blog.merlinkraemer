@@ -147,28 +147,6 @@ p {
   text-align: center;
   margin: 0 1rem;
 }
-.carousel-nav button {
-  background: none;
-  border: none;
-  color: var(--fg);
-  cursor: pointer;
-  padding: 0;
-  font-family: var(--font-stack);
-}
-.carousel-nav button.prev::before {
-  content: "[<]";
-}
-.carousel-nav button.next::before {
-  content: "[>]";
-}
-.carousel-nav button:hover {
-  text-decoration: underline;
-}
-.carousel-nav button:disabled {
-  color: var(--fg-dim);
-  cursor: not-allowed;
-  text-decoration: none;
-}
 .carousel-single .carousel-nav {
   display: none;
 }
