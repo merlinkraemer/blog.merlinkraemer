@@ -1,6 +1,7 @@
 # BLOG.MERLINKRAEMER
 
 Author: Merlin Krämer
+
 Created: 01.03.25
 
 ## Overview
@@ -29,7 +30,7 @@ Created: 01.03.25
 │   ├── server/        # Backend
 │   │   └── server.js  # Express server
 │   │
-│   └── client/        # Frontend source
+│   └── client/        # Frontend 
 │       ├── js/        # JavaScript modules
 │       │   ├── admin.js
 │       │   ├── login.js
@@ -42,66 +43,34 @@ Created: 01.03.25
 │           ├── components/
 │           └── layout/
 │
-├── public/            # Static files
+├── public/            # Static
 │   ├── index.html
 │   ├── about.html
 │   ├── admin.html
 │   ├── login.html
 │   ├── css/          # Compiled CSS
-│   ├── js/           # Client-side JS
+│   ├── js/           # Client JS
 │   └── media/        # Uploaded files
 │
-├── config/           # Configuration
+├── config/           
 │   ├── posts.json    # Blog posts data
 │   ├── nginx.conf
 │   └── .htaccess
 │
-├── scripts/         # Utility scripts
+├── scripts/         
 │   └── generate-hash.js
 │
-├── package.json
-├── .env            # Environment variables
-└── .env.example    # Environment template
+└──package.json
 ```
-
-## Setup
-
-1. Clone the repository
-2. Copy `.env.example` to `.env` and configure:
-   ```
-   PORT=3001
-   SESSION_SECRET=your-secret-key
-   ADMIN_USERNAME=your-username
-   ADMIN_PASSWORD=your-password
-   SALT=your-32-character-salt
-   ```
-3. Install dependencies:
-   ```bash
-   npm install
-   ```
-4. Build CSS:
-   ```bash
-   npm run build
-   ```
-5. Start development server:
-   ```bash
-   npm run dev
-   ```
-   This will start:
-   - Node.js server on port 3001
-   - Browser-sync on port 3000
-   - SCSS watcher
-   
-   Access the site at: http://localhost:3000
 
 ## Development Scripts
 
-- `npm start` - Start production server
-- `npm run dev` - Start development environment
-- `npm run dev:server` - Start server with nodemon
-- `npm run dev:sass` - Watch SCSS changes
-- `npm run dev:sync` - Start browser-sync
-- `npm run build` - Build production CSS
+- `npm start` - Start prod server
+- `npm run dev` - Start dev environment
+- `npm run dev:server` - Start server w nodemon
+- `npm run dev:sass` - Watch SCSS
+- `npm run dev:sync` - browser-sync
+- `npm run build` - Build CSS
 
 ## API 
 
@@ -116,7 +85,7 @@ Created: 01.03.25
   {
     "title": "string",
     "content": "string",
-    "images": ["string"] // can be multiple --> array
+    "images": ["string"]
   }
   ```
 - `DELETE /api/posts/:id` - delete posts
