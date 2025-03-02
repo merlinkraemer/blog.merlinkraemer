@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log('Login data:', data);
             
             if (response.ok && data.success) {
-                showMessage('Login successful! Redirecting...', 'success');
+                showMessage('T', 'success');
                 if (window.updateAuthLink) {
                     await window.updateAuthLink();
                 }
