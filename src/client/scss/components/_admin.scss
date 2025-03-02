@@ -8,7 +8,18 @@ html {
     background-color: var(--bg);
 }
 
-// Modal styles
+// Navigation styles
+nav {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    #logoutButton {
+        margin-left: auto;
+    }
+}
+
+// Modal styles with performance optimizations
 .modal {
     display: none;
     position: fixed;
@@ -16,7 +27,8 @@ html {
     width: 100vw;
     height: 100vh;
     z-index: 9999;
-
+    contain: layout size;
+    will-change: transform, opacity;
 
     &.show {
         display: block;
@@ -29,23 +41,32 @@ html {
         height: 100%;
         background-color: var(--background);
         z-index: 10000;
-opacity: 0.75;
+        opacity: 0.75;
+        backdrop-filter: blur(2px);
+        -webkit-backdrop-filter: blur(2px);
+        will-change: opacity;
+        transform: translateZ(0);
     }
 
     .modal-content {
         position: fixed;
         top: 50%;
         left: 50%;
-        transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%) translateZ(0);
         background-color: var(--background);
         border: 1px solid var(--border);
         padding: 2rem;
         width: auto;
-        min-width: 500px;
-        max-width: 800px;
+        min-width: min(500px, 90vw);
+        max-width: min(800px, 95vw);
         max-height: 80vh;
         overflow-y: auto;
         z-index: 10001;
+        contain: content;
+        will-change: transform;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        overscroll-behavior: contain;
+        -webkit-overflow-scrolling: touch;
     }
 
     .modal-header {
@@ -53,6 +74,8 @@ opacity: 0.75;
         justify-content: space-between;
         align-items: center;
         margin-bottom: 1rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid var(--border);
 
         h3 {
             margin: 0;
@@ -61,11 +84,12 @@ opacity: 0.75;
 
         .close-modal {
             background: none;
-            border: none;
+            border: none !important;
             color: var(--fg);
             font-size: 1.5rem;
             cursor: pointer;
-            padding: 0.5rem;
+            padding: 0.25rem !important;
+            min-width: auto !important;
 
             &:hover {
                 color: var(--error);
@@ -80,57 +104,54 @@ opacity: 0.75;
         margin-top: 2rem;
         padding-top: 1rem;
         border-top: 1px solid var(--border);
+
+        button {
+            min-width: 100px;
+        }
     }
 
     .modal-body {
         padding: 1rem 0;
-
-        .upload-form {
-            button {
-                margin-top: 1rem;
-            }
-        }
     }
 }
 
-// Button styles
+// Base button styles
 button {
     padding: 0.5rem 1rem;
     background: none;
-    border: none;
+    border: 1px solid var(--border);
     color: var(--fg);
     cursor: pointer;
-
-    &::before {
-        content: "[";
-        color: var(--fg);
-    }
-
-    &::after {
-        content: "]";
-        color: var(--fg);
-    }
-
-    &:hover, &.active {
-        &::before,
-        &::after {
-            color: var(--active);
-        }
-    }
-}
-
-// Upload button specific style
-.upload-form button {
-    border: 1px solid var(--border);
-    
-    &::before,
-    &::after {
-        content: none;
-    }
+    transition: all 0.2s ease;
+    min-width: 80px;
+    text-align: center;
 
     &:hover {
         border-color: var(--active);
         color: var(--active);
+    }
+
+    // Special style for non-modal buttons
+    &:not(.modal button):not(.form-actions button) {
+        border: none;
+        min-width: auto;
+
+        &::before {
+            content: "[";
+            color: var(--fg);
+        }
+
+        &::after {
+            content: "]";
+            color: var(--fg);
+        }
+
+        &:hover {
+            &::before,
+            &::after {
+                color: var(--active);
+            }
+        }
     }
 }
 
@@ -178,17 +199,14 @@ textarea {
         cursor: pointer;
     }
 
-    button {
-        align-self: flex-start;
-        padding: 0.5rem 1rem;
-        background: var(--bg);
-        border: 1px solid var(--border);
-        color: var(--fg);
-        cursor: pointer;
+    .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 1rem;
+        margin-top: 1rem;
 
-        &:hover {
-            border-color: var(--active);
-            color: var(--active);
+        button {
+            min-width: 100px;
         }
     }
 }
@@ -272,25 +290,6 @@ textarea {
             margin-top: 2rem;
             padding-top: 1rem;
             border-top: 1px solid var(--border);
-
-            button {
-                &::before {
-                    content: "[";
-                    color: var(--fg);
-                }
-
-                &::after {
-                    content: "]";
-                    color: var(--fg);
-                }
-
-                &:hover {
-                    &::before,
-                    &::after {
-                        color: var(--active);
-                    }
-                }
-            }
         }
     }
 }
@@ -307,22 +306,29 @@ textarea {
     color: var(--error);
 }
 
-// Media grid for image selection
+// Media grid with performance optimizations
 .media-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
     gap: 1rem;
     margin: 1rem 0;
+    contain: layout style paint;
+    will-change: transform;
+    transform: translateZ(0);
 }
 
-// Individual media items
+// Individual media items with optimizations
 .media-item {
     position: relative;
     cursor: pointer;
     border: 1px solid var(--border);
     padding: 0.25rem;
+    contain: layout size;
+    will-change: transform;
+    transform: translateZ(0);
+    transition: border-color 0.2s ease;
 
-    // States
+    // States with hardware acceleration
     &:hover,
     &.selected {
         border-color: var(--active);
@@ -334,9 +340,13 @@ textarea {
         height: 150px;
         object-fit: cover;
         display: block;
+        contain: strict;
+        will-change: transform;
+        transform: translateZ(0);
+        backface-visibility: hidden;
     }
 
-    // Checkbox styling
+    // Optimized checkbox styling
     input[type="checkbox"] {
         appearance: none;
         width: 1.2rem;
@@ -347,6 +357,10 @@ textarea {
         top: 0.5rem;
         right: 0.5rem;
         cursor: pointer;
+        contain: strict;
+        will-change: transform, background-color, border-color;
+        transform: translateZ(0);
+        transition: background-color 0.2s ease, border-color 0.2s ease;
         
         &:checked {
             background: var(--active);
@@ -357,7 +371,7 @@ textarea {
                 position: absolute;
                 top: 50%;
                 left: 50%;
-                transform: translate(-50%, -50%);
+                transform: translate(-50%, -50%) translateZ(0);
             }
         }
 
@@ -367,7 +381,7 @@ textarea {
     }
 }
 
-// Post editing form
+// Post editing form with performance optimizations
 .post-edit-form {
     display: none;
     margin-top: 1rem;
@@ -375,12 +389,29 @@ textarea {
     border: 1px solid var(--border);
     max-height: 0;
     overflow: hidden;
-    transition: all 0.3s ease-out;
+    contain: content;
+    will-change: max-height;
+    transform: translateZ(0);
+    transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
     &.show {
         display: block;
         max-height: 2000px;
         padding: 1rem;
+    }
+
+    // Optimize scrolling performance
+    &::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: var(--bg);
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: var(--border);
+        border-radius: 4px;
     }
 
     textarea {
@@ -416,8 +447,8 @@ textarea {
 // Current images section
 .current-images {
     h4 {
-        color: var(--fg);  // Changed from primary to normal text
-        font-weight: bold;  // Added bold weight
+        color: var(--fg);
+        font-weight: bold;
         margin-bottom: 1rem;
     }
 }
@@ -444,7 +475,7 @@ textarea {
 
     span {
         font-size: 0.8rem;
-        color: var(--fg);  // Changed from primary to normal text
+        color: var(--fg);
         word-break: break-all;
     }
 }

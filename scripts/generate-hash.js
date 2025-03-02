@@ -1,17 +1,15 @@
-const crypto = require('crypto');
-require('dotenv').config();
+const bcrypt = require('bcryptjs');
 
-const password = process.env.ADMIN_PASSWORD;
-const salt = process.env.SALT;
+// Get password from command line argument
+const password = process.argv[2];
 
-if (!password || !salt) {
-    console.error('Error: ADMIN_PASSWORD and SALT must be set in .env file');
+if (!password) {
+    console.error('Usage: node generate-hash.js <password>');
     process.exit(1);
 }
 
-const hash = crypto
-    .createHash('sha256')
-    .update(password + salt)
-    .digest('hex');
+// Generate salt and hash
+const salt = bcrypt.genSaltSync(10);
+const hash = bcrypt.hashSync(password, salt);
 
 console.log('Password Hash:', hash);

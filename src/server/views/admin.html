@@ -18,9 +18,15 @@
             </div>
             <div class="modal-body">
                 <form id="uploadForm" class="upload-form">
-                    <input type="file" id="mediaFile" accept="image/*,.gif" multiple>
+                    <div class="form-group">
+                        <label for="mediaFile">Select Images:</label>
+                        <input type="file" id="mediaFile" accept="image/*,.gif" multiple>
+                    </div>
                     <div class="upload-preview" id="uploadPreview"></div>
-                    <button type="submit" id="uploadButton">Upload Files</button>
+                    <div class="form-actions">
+                        <button type="submit" id="uploadButton">Upload Files</button>
+                        <button type="button" class="close-modal">Cancel</button>
+                    </div>
                 </form>
                 <div id="uploadProgress" class="upload-progress"></div>
             </div>
@@ -39,10 +45,10 @@
                 <div id="mediaGrid" class="media-grid">
                     <!-- Images will be loaded here -->
                 </div>
-                <div class="modal-actions">
-                    <button id="insertSelectedImages">Insert Selected</button>
-                    <button class="close-modal">Cancel</button>
-                </div>
+            </div>
+            <div class="modal-actions">
+                <button id="insertSelectedImages">Insert Selected</button>
+                <button class="close-modal">Cancel</button>
             </div>
         </div>
     </div>
@@ -130,8 +136,9 @@
             <div class="description">Du hast meinen Blog gefunden! Ich habe mir vorgenommen ein Spiel zu entwickeln - Keine Ahnung wie das geht, aber ich werds schon rausfinden. Updates dazu gibt hier!</div>
             <br><h1>~/blog/admin</h1>
             <nav>
-                <a href="index.html">home</a>
-                <a href="about.html">about</a>
+                <a href="/index.html">home</a>
+                <a href="/about.html">about</a>
+                <a href="/admin" class="active">admin</a>
                 <a href="#" id="logoutButton">logout</a>
             </nav>
         </header>
@@ -176,5 +183,20 @@
         </footer>
     </div>
     <script src="/js/admin.js"></script>
+    <script>
+        // Check authentication on page load
+        (async function() {
+            try {
+                const response = await fetch('/api/auth/status');
+                const data = await response.json();
+                if (!data.authenticated) {
+                    window.location.href = '/login.html';
+                }
+            } catch (error) {
+                console.error('Auth check error:', error);
+                window.location.href = '/login.html';
+            }
+        })();
+    </script>
 </body>
 </html>

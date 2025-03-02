@@ -16,39 +16,11 @@ async function checkAuth() {
     }
 }
 
-// Performance optimized state management
-const state = {
-    selectedImages: [],
-    editingPostId: null,
-    cachedImages: null,
-    imageEventListeners: new WeakMap(),
-    imageObserver: null,
-    modalState: {
-        initialized: false,
-        activeModal: null
-    }
-};
-
-// Debounce function
-function debounce(func, wait) {
-    let timeout;
-    return function(...args) {
-        clearTimeout(timeout);
-        timeout = setTimeout(() => func.apply(this, args), wait);
-    };
-}
-
-// Throttle function
-function throttle(func, limit) {
-    let inThrottle;
-    return function(...args) {
-        if (!inThrottle) {
-            func.apply(this, args);
-            inThrottle = true;
-            setTimeout(() => inThrottle = false, limit);
-        }
-    };
-}
+// Store selected images
+let selectedImages = [];
+let editingPostId = null;
+let cachedImages = null;
+let imageEventListeners = new WeakMap();
 
 // Function to format date in [YYYY-MM-DD] format
 function formatDate(date) {
@@ -115,83 +87,53 @@ function createPostHTML(post) {
     `;
 }
 
-// Optimized image click handler
+// Function to add image click handlers
 function addImageClickHandlers(container) {
-    // Remove existing handler if any
-    const existingHandler = container._clickHandler;
-    if (existingHandler) {
-        container.removeEventListener('click', existingHandler);
-    }
+    container.querySelectorAll('.media-item').forEach(item => {
+        // Skip if already has event listener
+        if (imageEventListeners.has(item)) return;
 
-    // Create new delegated click handler
-    const clickHandler = (e) => {
-        const item = e.target.closest('.media-item');
-        if (!item) return;
+        const handler = (e) => {
+            const checkbox = item.querySelector('input[type="checkbox"]');
+            if (e.target !== checkbox) {
+                checkbox.checked = !checkbox.checked;
+                item.classList.toggle('selected', checkbox.checked);
+                
+                selectedImages = Array.from(container.querySelectorAll('input[type="checkbox"]:checked'))
+                    .map(cb => cb.value);
+            }
+        };
 
-        const checkbox = item.querySelector('input[type="checkbox"]');
-        if (e.target !== checkbox) {
-            checkbox.checked = !checkbox.checked;
-            item.classList.toggle('selected', checkbox.checked);
-            
-            // Use container-level query for better performance
-            state.selectedImages = Array.from(container.querySelectorAll('input[type="checkbox"]:checked'))
-                .map(cb => cb.value);
-        }
-    };
-
-    container.addEventListener('click', clickHandler);
-    container._clickHandler = clickHandler;
-
-    // Setup lazy loading for images
-    if (!state.imageObserver) {
-        state.imageObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const img = entry.target;
-                    if (img.dataset.src) {
-                        img.src = img.dataset.src;
-                        img.removeAttribute('data-src');
-                        state.imageObserver.unobserve(img);
-                    }
-                }
-            });
-        }, { rootMargin: '50px' });
-    }
-
-    // Observe all images in container
-    container.querySelectorAll('img[data-src]').forEach(img => {
-        state.imageObserver.observe(img);
+        item.addEventListener('click', handler);
+        imageEventListeners.set(item, handler);
     });
 }
 
-// Function to load available images with error handling
+// Function to load available images
 async function loadImages() {
-    const mediaGrid = document.getElementById('mediaGrid');
-    if (!mediaGrid) return;
+    if (cachedImages) {
+        const mediaGrid = document.getElementById('mediaGrid');
+        mediaGrid.innerHTML = cachedImages;
+        addImageClickHandlers(mediaGrid);
+        return;
+    }
 
     try {
-        showMessage('Loading images...', 'info');
         const response = await fetch('/api/images');
         const data = await response.json();
         
         if (data.success && data.images) {
-            const fragment = document.createDocumentFragment();
-            data.images.forEach(image => {
-                const div = document.createElement('div');
-                div.className = 'media-item';
-                div.dataset.path = image.path;
-                div.innerHTML = `
+            const html = data.images.map(image => `
+                <div class="media-item" data-path="${image.path}">
                     <img src="${image.url}" alt="${image.name}">
                     <input type="checkbox" name="images[]" value="${image.path}">
-                `;
-                fragment.appendChild(div);
-            });
+                </div>
+            `).join('');
 
-            mediaGrid.innerHTML = '';
-            mediaGrid.appendChild(fragment);
+            cachedImages = html;
+            const mediaGrid = document.getElementById('mediaGrid');
+            mediaGrid.innerHTML = html;
             addImageClickHandlers(mediaGrid);
-        } else {
-            throw new Error('No images found');
         }
     } catch (error) {
         console.error('Error loading images:', error);
@@ -226,23 +168,26 @@ function showMessage(text, type = 'success') {
     }, 5000);
 }
 
-// Optimized modal management
-function initializeModalEventListeners() {
-    if (state.modalState.initialized) return;
+// Modal management
+let modalEventListenersInitialized = false;
 
-    // Use event delegation for modal interactions
-    document.body.addEventListener('click', (e) => {
-        // Close on overlay click
-        if (e.target.matches('.modal-overlay')) {
-            const modal = e.target.closest('.modal');
+function initializeModalEventListeners() {
+    if (modalEventListenersInitialized) return;
+
+    // Close on overlay click
+    document.querySelectorAll('.modal-overlay').forEach(overlay => {
+        overlay.addEventListener('click', () => {
+            const modal = overlay.closest('.modal');
             if (modal) closeModal(modal.id);
-        }
-        
-        // Close on X button click
-        if (e.target.matches('.close-modal')) {
-            const modal = e.target.closest('.modal');
+        });
+    });
+    
+    // Close on X button click
+    document.querySelectorAll('.close-modal').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const modal = btn.closest('.modal');
             if (modal) closeModal(modal.id);
-        }
+        });
     });
 
     // Handle image selection confirmation
@@ -250,60 +195,37 @@ function initializeModalEventListeners() {
     if (insertBtn) {
         insertBtn.onclick = () => {
             const modal = document.getElementById('imageSelectModal');
-            if (!modal) return;
-
             const selectedPaths = Array.from(modal.querySelectorAll('input[type="checkbox"]:checked'))
                 .map(cb => cb.value);
-            state.selectedImages = selectedPaths;
+            selectedImages = selectedPaths;
             
-            // Update preview using DocumentFragment
+            // Update preview
             const previewDiv = document.getElementById('createPostMedia');
             if (previewDiv) {
-                const fragment = document.createDocumentFragment();
-                selectedPaths.forEach(path => {
-                    const div = document.createElement('div');
-                    div.className = 'preview-image';
-                    div.innerHTML = `<img src="${path}" alt="Selected image">`;
-                    fragment.appendChild(div);
-                });
-                previewDiv.innerHTML = '';
-                previewDiv.appendChild(fragment);
+                previewDiv.innerHTML = selectedPaths.map(path => `
+                    <div class="preview-image">
+                        <img src="${path}" alt="Selected image">
+                    </div>
+                `).join('');
             }
             
             closeModal('imageSelectModal');
         };
     }
 
-    state.modalState.initialized = true;
+    modalEventListenersInitialized = true;
 }
 
-// Optimized modal functions
 function openModal(modalId) {
     const modal = document.getElementById(modalId);
-    if (!modal || state.modalState.activeModal === modalId) return;
-    
-    // Close any open modal first
-    if (state.modalState.activeModal) {
-        closeModal(state.modalState.activeModal);
-    }
-    
+    if (!modal) return;
     modal.style.display = 'block';
-    state.modalState.activeModal = modalId;
-    
-    // Ensure modal event listeners are initialized
-    if (!state.modalState.initialized) {
-        initializeModalEventListeners();
-    }
 }
 
 function closeModal(modalId) {
     const modal = document.getElementById(modalId);
     if (!modal) return;
-    
     modal.style.display = 'none';
-    if (state.modalState.activeModal === modalId) {
-        state.modalState.activeModal = null;
-    }
 }
 
 // Handle file upload
@@ -311,40 +233,24 @@ document.getElementById('manageMediaBtn').addEventListener('click', () => {
     openModal('mediaUploadModal');
 });
 
-// Optimized file upload handling
-function initializeFileUpload() {
-    const uploadForm = document.getElementById('uploadForm');
-    if (!uploadForm) return;
-
-    const fileInput = document.getElementById('mediaFile');
-    const maxFileSize = 5 * 1024 * 1024; // 5MB
-    
+// Handle file upload form
+const uploadForm = document.getElementById('uploadForm');
+if (uploadForm) {
     uploadForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         
+        const fileInput = document.getElementById('mediaFile');
         const files = fileInput.files;
+        
         if (files.length === 0) {
             showMessage('Please select files to upload', 'error');
             return;
         }
         
-        // Validate files
-        const validFiles = Array.from(files).filter(file => {
-            if (file.size > maxFileSize) {
-                showMessage(`File ${file.name} is too large (max 5MB)`, 'error');
-                return false;
-            }
-            if (!file.type.startsWith('image/')) {
-                showMessage(`File ${file.name} is not an image`, 'error');
-                return false;
-            }
-            return true;
-        });
-        
-        if (validFiles.length === 0) return;
-        
         const formData = new FormData();
-        validFiles.forEach(file => formData.append('files', file));
+        for (let file of files) {
+            formData.append('files', file);
+        }
         
         try {
             const response = await fetch('/api/upload', {
@@ -357,13 +263,9 @@ function initializeFileUpload() {
             if (data.files) {
                 showMessage('Files uploaded successfully!', 'success');
                 closeModal('mediaUploadModal');
-                state.cachedImages = null; // Clear cache to force reload
+                cachedImages = null; // Clear cache to force reload
                 await loadImages(); // Reload images grid
                 fileInput.value = ''; // Clear input
-                
-                // Clear preview
-                const preview = document.getElementById('uploadPreview');
-                if (preview) preview.innerHTML = '';
             }
         } catch (error) {
             console.error('Upload error:', error);
@@ -392,20 +294,10 @@ document.getElementById('mediaFile')?.addEventListener('change', (e) => {
     }
 });
 
-// Toggle image grid for new post with error handling
-document.getElementById('toggleImages')?.addEventListener('click', async () => {
-    try {
-        openModal('imageSelectModal');
-        await loadImages();
-        
-        // Ensure modal is properly initialized
-        if (!state.modalState.initialized) {
-            initializeModalEventListeners();
-        }
-    } catch (error) {
-        console.error('Error loading images:', error);
-        showMessage('Error loading images. Please try again.', 'error');
-    }
+// Toggle image grid for new post
+document.getElementById('toggleImages').addEventListener('click', async () => {
+    openModal('imageSelectModal');
+    await loadImages();
 });
 
 // Toggle image grid for editing
@@ -419,27 +311,23 @@ function toggleEditImages(postId) {
     }
 }
 
-// Load images for editing with state management
+// Load images for editing
 async function loadEditImages(container, postId) {
     try {
-        if (!state.cachedImages) {
+        if (!cachedImages) {
             await loadImages();
         }
 
         // Get current post's images
         const post = document.querySelector(`.post[data-id="${postId}"]`);
-        if (!post) return;
-
         const currentImages = Array.from(post.querySelectorAll('.current-image img'))
             .map(img => img.getAttribute('src'));
 
-        container.innerHTML = state.cachedImages;
+        container.innerHTML = cachedImages;
         
         // Update checkboxes for current images
         container.querySelectorAll('.media-item').forEach(item => {
             const checkbox = item.querySelector('input[type="checkbox"]');
-            if (!checkbox) return;
-            
             const isSelected = currentImages.includes(item.dataset.path);
             checkbox.checked = isSelected;
             item.classList.toggle('selected', isSelected);
@@ -467,7 +355,7 @@ document.getElementById('submitPost').addEventListener('click', async () => {
         const postData = {
             title: titleInput.value.trim(),
             content: content,
-            images: state.selectedImages
+            images: selectedImages
         };
 
         const response = await fetch('/api/posts', {
@@ -485,24 +373,14 @@ document.getElementById('submitPost').addEventListener('click', async () => {
         const data = await response.json();
         showMessage('Post created successfully!');
         
-        // Clear form and state
+        // Clear form
         titleInput.value = '';
         contentInput.value = '';
-        state.selectedImages = [];
-        
-        // Clear media grid selections
-        const mediaGrid = document.getElementById('mediaGrid');
-        if (mediaGrid) {
-            mediaGrid.querySelectorAll('.media-item').forEach(item => {
-                item.classList.remove('selected');
-                const checkbox = item.querySelector('input[type="checkbox"]');
-                if (checkbox) checkbox.checked = false;
-            });
-        }
-        
-        // Clear preview
-        const previewDiv = document.getElementById('createPostMedia');
-        if (previewDiv) previewDiv.innerHTML = '';
+        selectedImages = [];
+        document.querySelectorAll('.media-item').forEach(item => {
+            item.classList.remove('selected');
+            item.querySelector('input[type="checkbox"]').checked = false;
+        });
         closeModal('imageSelectModal');
         
         // Reload posts
@@ -513,27 +391,20 @@ document.getElementById('submitPost').addEventListener('click', async () => {
     }
 });
 
-// Edit post with state management
+// Edit post
 function editPost(id) {
     const post = document.querySelector(`.post[data-id="${id}"]`);
-    if (!post) return;
-    
     post.classList.add('editing');
-    const form = post.querySelector('.post-edit-form');
-    if (form) form.classList.add('show');
-    state.editingPostId = id;
+    post.querySelector('.post-edit-form').classList.add('show');
+    editingPostId = id;
 }
 
-// Cancel edit with state management
+// Cancel edit
 function cancelEdit(id) {
     const post = document.querySelector(`.post[data-id="${id}"]`);
-    if (!post) return;
-    
     post.classList.remove('editing');
-    const form = post.querySelector('.post-edit-form');
-    if (form) form.classList.remove('show');
-    state.editingPostId = null;
-    state.selectedImages = [];
+    post.querySelector('.post-edit-form').classList.remove('show');
+    editingPostId = null;
 }
 
 // Update post
@@ -599,46 +470,12 @@ async function deletePost(id) {
     }
 }
 
-// Auto-resize textarea
-function initializeTextareaResize() {
-    const textareas = document.querySelectorAll('textarea');
-    textareas.forEach(textarea => {
-        const resize = () => {
-            textarea.style.height = 'auto';
-            textarea.style.height = textarea.scrollHeight + 'px';
-        };
-        
-        textarea.addEventListener('input', resize);
-        textarea.addEventListener('focus', resize);
-        
-        // Initial resize
-        resize();
-    });
-}
-
-// Optimized initialization
+// Initialize
 document.addEventListener('DOMContentLoaded', async () => {
     if (await checkAuth()) {
         initializeModalEventListeners();
-        initializeFileUpload();
-        initializeTextareaResize();
-        
-        // Load data in parallel
-        await Promise.all([
-            loadImages(),
-            loadPosts()
-        ]);
-        
-        // Setup scroll performance optimization
-        const debouncedScroll = debounce(() => {
-            if (state.imageObserver) {
-                document.querySelectorAll('img[data-src]').forEach(img => {
-                    state.imageObserver.observe(img);
-                });
-            }
-        }, 100);
-        
-        window.addEventListener('scroll', debouncedScroll, { passive: true });
+        await loadImages();
+        await loadPosts();
     }
 });
 

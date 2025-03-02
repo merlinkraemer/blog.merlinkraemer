@@ -90,9 +90,10 @@
             <div class="description">Du hast meinen Blog gefunden! Ich habe mir vorgenommen ein Spiel zu entwickeln - Keine Ahnung wie das geht, aber ich werds schon rausfinden. Updates dazu gibt hier!</div>
             <br><h1>~/blog</h1>
             <nav>
-                <a href="#" class="active">home</a>
-                <a href="about.html">about</a>
-                <a href="login.html">login</a>
+                <a href="/" class="active">home</a>
+                <a href="/about.html">about</a>
+                <a href="/admin" id="adminLink" style="display: none;">admin</a>
+                <a href="/login.html" id="loginLink">login</a>
             </nav>
         </header>
         
@@ -117,6 +118,18 @@
             handleNavigation();
             if (window.location.pathname === '/' || window.location.pathname.includes('index.html')) {
                 await loadPosts();
+            }
+
+            // Check auth status and update nav
+            try {
+                const response = await fetch('/api/auth/status');
+                const data = await response.json();
+                if (data.authenticated) {
+                    document.getElementById('adminLink').style.display = 'inline';
+                    document.getElementById('loginLink').style.display = 'none';
+                }
+            } catch (error) {
+                console.error('Auth check error:', error);
             }
         });
     </script>

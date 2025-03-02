@@ -63,129 +63,6 @@ p {
   padding: 1rem;
 }
 
-header {
-  margin-bottom: 2rem;
-  border-bottom: 1px solid var(--border);
-  padding-bottom: 0.5rem;
-  min-height: 320px;
-}
-header .greeting {
-  font-size: var(--global-font-size);
-  color: var(--fg);
-  display: flex;
-  align-items: center;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-}
-header .greeting::before {
-  content: "❯ ";
-  color: var(--active);
-  margin-right: 0.4em;
-}
-header .ascii-art {
-  display: flex;
-  justify-content: flex-start;
-  width: 100%;
-  color: var(--fg);
-  margin-bottom: 1rem;
-  font-size: 12px;
-  line-height: 1.2;
-}
-header .ascii-art .letter-group {
-  display: flex;
-  margin-right: 0.5rem;
-}
-header .ascii-art .ascii-letter {
-  white-space: pre;
-  display: inline-block;
-  flex-shrink: 0;
-  margin-right: 0.25rem;
-}
-@media (max-width: 768px) {
-  header .ascii-art {
-    flex-wrap: wrap;
-    font-size: 10px;
-  }
-  header .ascii-art .letter-group {
-    margin-bottom: 1rem;
-  }
-}
-header .description {
-  color: var(--fg-dim);
-  margin: 2rem 0;
-  font-size: var(--global-font-size);
-  max-width: fit-content;
-  font-weight: normal;
-}
-header h1 {
-  margin: 1rem 0;
-  padding: 0;
-  color: var(--fg);
-  font-size: 1rem;
-  line-height: var(--global-line-height);
-  position: relative;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  user-select: none;
-  cursor: default;
-}
-header h1::before {
-  content: "❯  ";
-  color: var(--active);
-  margin-right: 0.4em;
-  font-weight: bold;
-  font-size: 1rem;
-  user-select: none;
-  cursor: default;
-}
-header h1::after {
-  content: "root@merlinkraemer.de";
-  color: var(--fg-dim);
-  margin-left: auto;
-  font-weight: bold;
-  font-size: 1rem;
-}
-header nav {
-  margin: 1rem 0;
-}
-
-nav {
-  margin-top: 1rem;
-  display: flex;
-  align-items: center;
-}
-nav a {
-  font-size: var(--global-font-size);
-  margin-right: 1rem;
-  color: var(--fg);
-  text-decoration: none;
-}
-nav a::before {
-  content: "[";
-  color: var(--fg);
-}
-nav a::after {
-  content: "]";
-  color: var(--fg);
-}
-nav a:hover {
-  text-decoration: none;
-}
-nav a:hover::before, nav a:hover::after {
-  color: var(--active);
-  cursor: pointer;
-}
-nav a.active {
-  text-decoration: none;
-}
-nav a.active::before, nav a.active::after {
-  color: var(--active);
-}
-nav a[href="admin.html"], nav a[href="login.html"], nav a#logoutButton {
-  margin-left: auto;
-}
-
 .post {
   max-width: 600px;
   margin: 0 auto 2rem auto;
@@ -412,6 +289,15 @@ html {
   background-color: var(--bg);
 }
 
+nav {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+nav #logoutButton {
+  margin-left: auto;
+}
+
 .modal {
   display: none;
   position: fixed;
@@ -419,6 +305,8 @@ html {
   width: 100vw;
   height: 100vh;
   z-index: 9999;
+  contain: layout size;
+  will-change: transform, opacity;
 }
 .modal.show {
   display: block;
@@ -431,27 +319,38 @@ html {
   background-color: var(--background);
   z-index: 10000;
   opacity: 0.75;
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  will-change: opacity;
+  transform: translateZ(0);
 }
 .modal .modal-content {
   position: fixed;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%) translateZ(0);
   background-color: var(--background);
   border: 1px solid var(--border);
   padding: 2rem;
   width: auto;
-  min-width: 500px;
-  max-width: 800px;
+  min-width: min(500px, 90vw);
+  max-width: min(800px, 95vw);
   max-height: 80vh;
   overflow-y: auto;
   z-index: 10001;
+  contain: content;
+  will-change: transform;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
 }
 .modal .modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
 }
 .modal .modal-header h3 {
   margin: 0;
@@ -459,11 +358,12 @@ html {
 }
 .modal .modal-header .close-modal {
   background: none;
-  border: none;
+  border: none !important;
   color: var(--fg);
   font-size: 1.5rem;
   cursor: pointer;
-  padding: 0.5rem;
+  padding: 0.25rem !important;
+  min-width: auto !important;
 }
 .modal .modal-header .close-modal:hover {
   color: var(--error);
@@ -476,40 +376,40 @@ html {
   padding-top: 1rem;
   border-top: 1px solid var(--border);
 }
+.modal .modal-actions button {
+  min-width: 100px;
+}
 .modal .modal-body {
   padding: 1rem 0;
-}
-.modal .modal-body .upload-form button {
-  margin-top: 1rem;
 }
 
 button {
   padding: 0.5rem 1rem;
   background: none;
-  border: none;
+  border: 1px solid var(--border);
   color: var(--fg);
   cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 80px;
+  text-align: center;
 }
-button::before {
+button:hover {
+  border-color: var(--active);
+  color: var(--active);
+}
+button:not(.modal button):not(.form-actions button) {
+  border: none;
+  min-width: auto;
+}
+button:not(.modal button):not(.form-actions button)::before {
   content: "[";
   color: var(--fg);
 }
-button::after {
+button:not(.modal button):not(.form-actions button)::after {
   content: "]";
   color: var(--fg);
 }
-button:hover::before, button:hover::after, button.active::before, button.active::after {
-  color: var(--active);
-}
-
-.upload-form button {
-  border: 1px solid var(--border);
-}
-.upload-form button::before, .upload-form button::after {
-  content: none;
-}
-.upload-form button:hover {
-  border-color: var(--active);
+button:not(.modal button):not(.form-actions button):hover::before, button:not(.modal button):not(.form-actions button):hover::after {
   color: var(--active);
 }
 
@@ -552,17 +452,14 @@ textarea {
   color: var(--fg);
   cursor: pointer;
 }
-.upload-form button {
-  align-self: flex-start;
-  padding: 0.5rem 1rem;
-  background: var(--bg);
-  border: 1px solid var(--border);
-  color: var(--fg);
-  cursor: pointer;
+.upload-form .form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1rem;
 }
-.upload-form button:hover {
-  border-color: var(--active);
-  color: var(--active);
+.upload-form .form-actions button {
+  min-width: 100px;
 }
 
 .upload-preview {
@@ -637,17 +534,6 @@ textarea {
   padding-top: 1rem;
   border-top: 1px solid var(--border);
 }
-.create-post .create-post-form .create-post-actions button::before {
-  content: "[";
-  color: var(--fg);
-}
-.create-post .create-post-form .create-post-actions button::after {
-  content: "]";
-  color: var(--fg);
-}
-.create-post .create-post-form .create-post-actions button:hover::before, .create-post .create-post-form .create-post-actions button:hover::after {
-  color: var(--active);
-}
 
 .admin-form {
   margin: 2rem 0;
@@ -664,6 +550,9 @@ textarea {
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   gap: 1rem;
   margin: 1rem 0;
+  contain: layout style paint;
+  will-change: transform;
+  transform: translateZ(0);
 }
 
 .media-item {
@@ -671,6 +560,10 @@ textarea {
   cursor: pointer;
   border: 1px solid var(--border);
   padding: 0.25rem;
+  contain: layout size;
+  will-change: transform;
+  transform: translateZ(0);
+  transition: border-color 0.2s ease;
 }
 .media-item:hover, .media-item.selected {
   border-color: var(--active);
@@ -680,6 +573,10 @@ textarea {
   height: 150px;
   object-fit: cover;
   display: block;
+  contain: strict;
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 .media-item input[type=checkbox] {
   appearance: none;
@@ -691,6 +588,10 @@ textarea {
   top: 0.5rem;
   right: 0.5rem;
   cursor: pointer;
+  contain: strict;
+  will-change: transform, background-color, border-color;
+  transform: translateZ(0);
+  transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 .media-item input[type=checkbox]:checked {
   background: var(--active);
@@ -702,7 +603,7 @@ textarea {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%) translateZ(0);
 }
 .media-item input[type=checkbox]:hover {
   border-color: var(--active);
@@ -715,12 +616,25 @@ textarea {
   border: 1px solid var(--border);
   max-height: 0;
   overflow: hidden;
-  transition: all 0.3s ease-out;
+  contain: content;
+  will-change: max-height;
+  transform: translateZ(0);
+  transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .post-edit-form.show {
   display: block;
   max-height: 2000px;
   padding: 1rem;
+}
+.post-edit-form::-webkit-scrollbar {
+  width: 8px;
+}
+.post-edit-form::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+.post-edit-form::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
 }
 .post-edit-form textarea {
   width: 100%;
@@ -832,6 +746,288 @@ textarea {
 #message.error {
   color: var(--error);
   border-color: var(--error);
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.75);
+}
+.modal .modal-overlay {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10000;
+}
+.modal .modal-content {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 800px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  z-index: 10001;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.modal .modal-header {
+  padding: 15px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--bg);
+  z-index: 2;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  flex-shrink: 0;
+}
+.modal .modal-body {
+  padding: 0;
+  overflow-y: auto;
+  flex-grow: 1;
+  position: relative;
+  margin: 20px 0;
+}
+.modal .modal-actions {
+  padding: 15px 20px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  gap: 15px;
+  justify-content: flex-end;
+  background: var(--bg);
+  z-index: 2;
+  box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.1);
+  flex-shrink: 0;
+}
+.modal .close-modal {
+  background: none;
+  border: none;
+  font-size: 24px;
+  min-width: auto;
+  padding: 0;
+  color: var(--fg);
+}
+.modal .close-modal:hover {
+  color: var(--error);
+}
+
+#imageSelectModal .modal-content {
+  height: 90vh;
+}
+#imageSelectModal .media-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 15px;
+  padding: 0 20px;
+  min-height: 100%;
+}
+#imageSelectModal .media-item {
+  position: relative;
+  border: 1px solid var(--border);
+  padding: 5px;
+  cursor: pointer;
+  aspect-ratio: 1;
+  overflow: hidden;
+  background: var(--bg);
+}
+#imageSelectModal .media-item.selected {
+  border-color: var(--active);
+  background: rgba(var(--active-rgb), 0.1);
+}
+#imageSelectModal .media-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+#imageSelectModal .media-item input[type=checkbox] {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  opacity: 0.8;
+  z-index: 1;
+}
+
+#mediaUploadModal .modal-content {
+  height: auto;
+  max-height: 90vh;
+}
+#mediaUploadModal .upload-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 0 20px;
+}
+#mediaUploadModal .upload-form .form-group {
+  margin-bottom: 15px;
+}
+#mediaUploadModal .upload-form input[type=file] {
+  padding: 0.5rem;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--fg);
+  cursor: pointer;
+}
+#mediaUploadModal .upload-form .form-actions {
+  margin-top: 15px;
+  display: flex;
+  gap: 15px;
+  justify-content: flex-end;
+}
+#mediaUploadModal .upload-preview {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 1rem;
+  margin: 1rem 0;
+}
+#mediaUploadModal .upload-preview .preview-image {
+  margin: 10px 0;
+  border: 1px solid var(--border);
+  padding: 5px;
+}
+#mediaUploadModal .upload-preview .preview-image img {
+  max-width: 100%;
+  height: auto;
+}
+#mediaUploadModal .upload-progress {
+  margin-top: 1rem;
+  color: var(--active);
+  padding: 0 20px;
+}
+
+header {
+  margin-bottom: 2rem;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.5rem;
+  min-height: 320px;
+}
+header .greeting {
+  font-size: var(--global-font-size);
+  color: var(--fg);
+  display: flex;
+  align-items: center;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+header .greeting::before {
+  content: "❯ ";
+  color: var(--active);
+  margin-right: 0.4em;
+}
+header .ascii-art {
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+  color: var(--fg);
+  margin-bottom: 1rem;
+  font-size: 12px;
+  line-height: 1.2;
+}
+header .ascii-art .letter-group {
+  display: flex;
+  margin-right: 0.5rem;
+}
+header .ascii-art .ascii-letter {
+  white-space: pre;
+  display: inline-block;
+  flex-shrink: 0;
+  margin-right: 0.25rem;
+}
+@media (max-width: 768px) {
+  header .ascii-art {
+    flex-wrap: wrap;
+    font-size: 10px;
+  }
+  header .ascii-art .letter-group {
+    margin-bottom: 1rem;
+  }
+}
+header .description {
+  color: var(--fg-dim);
+  margin: 2rem 0;
+  font-size: var(--global-font-size);
+  max-width: fit-content;
+  font-weight: normal;
+}
+header h1 {
+  margin: 1rem 0;
+  padding: 0;
+  color: var(--fg);
+  font-size: 1rem;
+  line-height: var(--global-line-height);
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  user-select: none;
+  cursor: default;
+}
+header h1::before {
+  content: "❯  ";
+  color: var(--active);
+  margin-right: 0.4em;
+  font-weight: bold;
+  font-size: 1rem;
+  user-select: none;
+  cursor: default;
+}
+header h1::after {
+  content: "root@merlinkraemer.de";
+  color: var(--fg-dim);
+  margin-left: auto;
+  font-weight: bold;
+  font-size: 1rem;
+}
+header nav {
+  margin: 1rem 0;
+}
+
+nav {
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+}
+nav a {
+  font-size: var(--global-font-size);
+  margin-right: 1rem;
+  color: var(--fg);
+  text-decoration: none;
+}
+nav a::before {
+  content: "[";
+  color: var(--fg);
+}
+nav a::after {
+  content: "]";
+  color: var(--fg);
+}
+nav a:hover {
+  text-decoration: none;
+}
+nav a:hover::before, nav a:hover::after {
+  color: var(--active);
+  cursor: pointer;
+}
+nav a.active {
+  text-decoration: none;
+}
+nav a.active::before, nav a.active::after {
+  color: var(--active);
+}
+nav a[href="admin.html"], nav a[href="login.html"], nav a#logoutButton {
+  margin-left: auto;
 }
 
 footer {

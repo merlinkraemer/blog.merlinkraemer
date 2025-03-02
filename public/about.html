@@ -95,8 +95,9 @@
             <h1>~/blog/about</h1>
             <nav>
                 <a href="/">home</a>
-                <a href="#" class="active">about</a>
-                <a href="login.html">login</a>
+                <a href="/about.html" class="active">about</a>
+                <a href="/admin" id="adminLink" style="display: none;">admin</a>
+                <a href="/login.html" id="loginLink">login</a>
             </nav>
         </header>
 
@@ -133,6 +134,21 @@
         </footer>
     </div>
     <script src="/js/navigation.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Check auth status and update nav
+            try {
+                const response = await fetch('/api/auth/status');
+                const data = await response.json();
+                if (data.authenticated) {
+                    document.getElementById('adminLink').style.display = 'inline';
+                    document.getElementById('loginLink').style.display = 'none';
+                }
+            } catch (error) {
+                console.error('Auth check error:', error);
+            }
+        });
+    </script>
 </body>
 
 </html>
