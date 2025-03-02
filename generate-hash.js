@@ -1,7 +1,13 @@
 const crypto = require('crypto');
+require('dotenv').config();
 
-const password = 'merlinkraemer';
-const salt = 'f84d9b7c9e5d2a1f'; // Using the same salt from server.js
+const password = process.env.ADMIN_PASSWORD;
+const salt = process.env.SALT;
+
+if (!password || !salt) {
+    console.error('Error: ADMIN_PASSWORD and SALT must be set in .env file');
+    process.exit(1);
+}
 
 const hash = crypto
     .createHash('sha256')

@@ -3,12 +3,13 @@ const fs = require('fs').promises;
 const path = require('path');
 const session = require('express-session');
 const multer = require('multer');
+require('dotenv').config();
 
 // Basic setup
 const app = express();
 app.use(express.json());
 app.use(session({
-    secret: 'terminal-blog-secret',
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false
 }));
@@ -41,7 +42,7 @@ function checkAuth(req, res, next) {
 // Login/Logout
 app.post('/api/auth/login', (req, res) => {
     const { username, password } = req.body;
-    if (username === 'merlinkraemer' && password === 'merlinkraemer') {
+    if (username === process.env.ADMIN_USERNAME && password === process.env.ADMIN_PASSWORD) {
         req.session.authenticated = true;
         res.json({ success: true });
     } else {
@@ -113,7 +114,7 @@ app.post('/api/upload', checkAuth, upload.array('files'), (req, res) => {
 });
 
 // Start server
-app.listen(3001, () => {
-    console.log('Server running at http://localhost:3001');
-    console.log('Login with: merlinkraemer / merlinkraemer');
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, () => {
+    console.log(`Server running at http://localhost:${PORT}`);
 });
