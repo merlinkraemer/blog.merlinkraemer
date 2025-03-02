@@ -1,5 +1,5 @@
 {
-  "name": "gamedev_blog_terminal",
+  "name": "blog.merlinkraemer",
   "version": "1.0.0",
   "description": "A simple terminal-themed game development blog",
   "main": "server.js",

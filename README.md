@@ -1,4 +1,4 @@
-# GAMEDEV BLOG
+# BLOG.MERLINKRAEMER
 
 Author: Merlin Krämer
 Created: 01.03.25
