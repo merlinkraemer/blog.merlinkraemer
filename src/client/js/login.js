@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await response.json();
             
             if (response.ok && data.success) {
-                showMessage('Login successful! Redirecting...', 'success');
+                showMessage('Top! Sekunde...', 'success');
                 // Use the cached version from navigation.js
                 if (window.updateAuthLink) {
                     window.updateAuthLink();
@@ -82,11 +82,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     window.location.href = data.redirectUrl || '/admin';
                 }, 1000);
             } else {
-                showMessage(data.message || 'Login failed. Please check your credentials.', 'error');
+                showMessage(data.message || 'User oder pw falsch...', 'error');
             }
         } catch (error) {
             console.error('Login error:', error);
-            showMessage('An error occurred. Please try again.', 'error');
+            showMessage('Error?.', 'error');
         }
     });
     
@@ -109,7 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         } catch (error) {
             console.error('Auth check error:', error);
-            showMessage('Error checking authentication status.', 'error');
+            showMessage('Auth error', 'error');
         }
     };
     

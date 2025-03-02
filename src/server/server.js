@@ -33,13 +33,13 @@ app.get('/admin', checkAuth, (req, res) => {
             }
         }, err => {
             if (err) {
-                console.error('Error serving admin page:', err);
-                res.status(500).send('Error loading admin page');
+                console.error('Admin page load error:', err);
+                res.status(500).send('cannot load page');
             }
         });
     } catch (error) {
-        console.error('Error serving admin page:', error);
-        res.status(500).send('Error loading admin page');
+        console.error('Admin page load error:', error);
+        res.status(500).send('cannot load page');
     }
 });
 
@@ -68,8 +68,8 @@ app.get('/api/images', checkAuth, async (req, res) => {
         mediaCacheTime = now;
         res.json({ success: true, images });
     } catch (err) {
-        console.error('Error loading images:', err);
-        res.status(500).json({ success: false, error: 'Could not load images' });
+        console.error('Media load error:', err);
+        res.status(500).json({ success: false, error: 'Media load error' });
     }
 });
 
@@ -81,7 +81,7 @@ const upload = multer({
         if (file.mimetype.startsWith('image/')) {
             cb(null, true);
         } else {
-            cb(new Error('Only images allowed'));
+            cb(new Error('nur images / gif allowed'));
         }
     }
 });
@@ -98,7 +98,7 @@ function checkAuth(req, res, next) {
         res.redirect(302, '/login.html');
     } else {
         // For API requests, send JSON response
-        res.status(401).json({ error: 'Please login first' });
+        res.status(401).json({ error: 'erst einloggen' });
     }
 }
 
@@ -108,7 +108,7 @@ app.post('/api/auth/login', async (req, res) => {
     
     // Check username first
     if (username !== process.env.ADMIN_USERNAME) {
-        return res.status(401).json({ success: false, message: 'Wrong username or password' });
+        return res.status(401).json({ success: false, message: 'Falscher user / pw' });
     }
 
     // Compare password with stored hash
@@ -117,7 +117,7 @@ app.post('/api/auth/login', async (req, res) => {
         req.session.username = username;
         res.json({ success: true, redirectUrl: '/admin' });
     } else {
-        res.status(401).json({ success: false, message: 'Wrong username or password' });
+        res.status(401).json({ success: false, message: 'Falscher user / pw' });
     }
 });
 
@@ -138,8 +138,8 @@ app.get('/api/posts', async (req, res) => {
             .catch(() => ({ posts: [] }));
         res.json({ success: true, ...data });
     } catch (err) {
-        console.error('Error loading posts:', err);
-        res.status(500).json({ success: false, error: 'Could not load posts' });
+        console.error('posts load error:', err);
+        res.status(500).json({ success: false, error: 'Post können nicht geladen werden' });
     }
 });
 
@@ -150,7 +150,7 @@ app.post('/api/posts', checkAuth, async (req, res) => {
         if (!title?.trim() || !content?.trim()) {
             return res.status(400).json({ 
                 success: false, 
-                error: 'Title and content are required' 
+                error: 'Titel und Beschreibung angeben' 
             });
         }
 
@@ -175,7 +175,7 @@ app.post('/api/posts', checkAuth, async (req, res) => {
 
         res.json({ 
             success: true, 
-            message: 'Post created successfully',
+            message: 'Post erstellt',
             post: newPost
         });
     } catch (err) {

@@ -156,7 +156,8 @@ a, button {
     // Special case for admin, login, and logout links
     &[href="admin.html"],
     &[href="login.html"],
-    &#logoutButton {
+    &#logoutButton,
+    &#loginLink {
         margin-left: auto;  // Push admin/login/logout to the right
     }
 }

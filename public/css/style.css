@@ -973,7 +973,7 @@ a.active, button.active {
 a.active::before, a.active::after, button.active::before, button.active::after {
   color: var(--active);
 }
-a[href="admin.html"], a[href="login.html"], a#logoutButton, button[href="admin.html"], button[href="login.html"], button#logoutButton {
+a[href="admin.html"], a[href="login.html"], a#logoutButton, a#loginLink, button[href="admin.html"], button[href="login.html"], button#logoutButton, button#loginLink {
   margin-left: auto;
 }
 
