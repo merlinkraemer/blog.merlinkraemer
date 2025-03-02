@@ -1,0 +1,35 @@
+// Footer Component Styles
+// Styles for the site footer and social links
+
+@use '../base/variables' as *;
+
+// Main footer
+footer {
+    margin-top: 3rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+}
+
+// Social links container
+.social-links {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+
+    // Individual links
+    a {
+        color: var(--link-color);  // Using new link color variable
+        text-decoration: none;
+
+        // Remove all bracket styles
+        &::before,
+        &::after {
+            content: none;
+        }
+
+        // Hover state
+        &:hover {
+            text-decoration: underline;
+        } 
+    }
+}

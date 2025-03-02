@@ -1,0 +1,101 @@
+// Mobile Styles (Tablet & Mobile)
+// Responsive styles for screens up to 600px
+
+@use '../base/variables' as *;
+
+@media (max-width: 600px) {
+    // Remove font-size variations
+    h1, h2, h3, h4, h5, h6,
+    nav a,
+    .post-title,
+    .post-date,
+    .post-text,
+    .description,
+    .about-content,
+    pre,
+    button,
+    input,
+    textarea {
+        font-size: var(--global-font-size) !important;
+        font-weight: var(--global-font-weight) !important;
+    }
+
+    // Remove font-size overrides
+    h1, h2, h3, h4, h5, h6,
+    nav a,
+    .post-title,
+    .post-date,
+    .post-text,
+    pre,
+    button,
+    input,
+    textarea {
+        font-size: var(--global-font-size) !important;
+        font-weight: var(--global-font-weight) !important;
+    }
+
+    // Container adjustments
+    .container {
+        padding: 0.5rem;
+    }
+
+    // Header adjustments
+    header h1 {
+        font-size: 0.9rem;
+    }
+
+    // Navigation adjustments
+    nav {
+        margin-top: 0.5rem;
+
+        a {
+            font-size: var(--global-font-size);  // Keep consistent even on mobile
+            margin-right: 0.5rem;
+        }
+    }
+
+    // Post adjustments
+    .post {
+        &-title {
+            font-size: 1.2rem;
+        }
+
+        &-date {
+            font-size: 0.8rem;
+        }
+
+        &-text {
+            font-size: 0.9rem;
+        }
+
+        &-media {
+            height: 350px;  // Reduced height for mobile
+        }
+    }
+
+    // Carousel adjustments
+    .carousel-images {
+        height: 350px;  // Match post-media height
+    }
+
+    // Code block adjustments
+    pre {
+        font-size: 0.6rem;  // Smaller code for mobile
+    }
+
+    // About page adjustments
+    .about-content {
+        font-size: 0.9rem;
+    }
+
+    // Keep description style consistent
+    .description {
+        font-size: var(--global-font-size) !important;
+        font-weight: normal !important;
+        color: var(--fg-dim) !important;
+    }
+
+    .description {
+        font-size: var(--global-font-size);  // Keep consistent even on mobile
+    }
+}

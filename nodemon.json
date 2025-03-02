@@ -1,0 +1,14 @@
+{
+  "verbose": true,
+  "watch": [
+    "server.js",
+    "public/css/style.css",
+    "scss/**/*.scss",
+    "*.html"
+  ],
+  "ext": "js,json,scss,html",
+  "ignore": [
+    "node_modules",
+    "posts.json"
+  ]
+}

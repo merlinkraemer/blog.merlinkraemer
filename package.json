@@ -1,0 +1,21 @@
+{
+  "name": "gamedev_blog_terminal",
+  "version": "1.0.0",
+  "description": "A simple terminal-themed game development blog",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "concurrently \"sass --watch scss/main.scss:public/css/style.css --no-source-map --poll\" \"nodemon server.js\" \"browser-sync start --proxy 'localhost:3001' --files 'public/css/*.css, *.html' --port 3000 --ui-port 3002\""
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "express-session": "^1.18.1",
+    "multer": "^1.4.5-lts.1"
+  },
+  "devDependencies": {
+    "browser-sync": "^1.3.7",
+    "concurrently": "^8.2.2",
+    "nodemon": "^3.1.9",
+    "sass": "^1.85.1"
+  }
+}

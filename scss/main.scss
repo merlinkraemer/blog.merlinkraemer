@@ -1,0 +1,21 @@
+// Main SCSS Entry Point
+// This file uses modern @use syntax to import all partials
+
+// Base styles - Variables, resets, and foundational styles
+@use 'base/variables';  // Color scheme, typography, and global variables
+@use 'base/reset';      // Basic reset and container styles
+
+// Components - Individual UI elements and widgets
+
+@use 'components/posts';     // Blog post styling
+@use 'components/carousel';  // Image carousel/slider
+@use 'components/about';     // About page styles
+@use 'components/forms';     // Form elements and styles
+@use 'components/admin';     // Admin interface styles
+@use 'components/login';     // Login form styles
+
+// Layout - Major page sections and responsive layouts
+@use 'layout/header';    // Site header and navigation
+@use 'layout/footer';        // Site footer
+@use 'layout/mobile';        // Tablet and mobile styles (max-width: 600px)
+@use 'layout/mobile-small';  // Small mobile styles (max-width: 400px)

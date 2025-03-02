@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terminal Blog</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="terminal">
+    <div class="container">
+        <header>
+            <div class="greeting">Hi, ich bin</div>
+            <div class="ascii-art">
+                <div class="letter-group">
+                    <!-- M and E -->
+                    <div class="ascii-letter">      ___     
+     /\__\    
+    /::|  |   
+   /:|:|  |   
+  /:/|:|__|__ 
+ /:/ |::::\__\
+ \/__/~~/:/  /
+       /:/  / 
+      /:/  /  
+     /:/  /   
+     \/__/    </div>
+                    <div class="ascii-letter">      ___     
+     /\  \    
+    /::\  \   
+   /:/\:\  \  
+  /::\~\:\  \ 
+ /:/\:\ \:\__\
+ \:\~\:\ \/__/
+  \:\ \:\__\  
+   \:\ \/__/  
+    \:\__\    
+     \/__/    </div>
+                </div>
+                <div class="letter-group">
+                    <!-- R and L -->
+                    <div class="ascii-letter">      ___     
+     /\  \    
+    /::\  \   
+   /:/\:\  \  
+  /::\~\:\  \ 
+ /:/\:\ \:\__\
+ \/_|::\/:/  /
+    |:|::/  / 
+    |:|\/__/  
+    |:|  |    
+     \|__|    </div>
+                    <div class="ascii-letter">      ___ 
+     /\__\
+    /:/  /
+   /:/  / 
+  /:/  /  
+ /:/__/   
+ \:\  \   
+  \:\  \  
+   \:\  \ 
+    \:\__\
+     \/__/</div>
+                </div>
+                <div class="letter-group">
+                    <!-- I and N -->
+                    <div class="ascii-letter">      ___   
+     /\  \  
+     \:\  \ 
+     /::\__\
+  __/:/\/__/
+ /\/:/  /   
+ \::/__/    
+  \:\__\    
+   \/__/    
+            
+            </div>
+                    <div class="ascii-letter">      ___     
+     /\__\    
+    /::|  |   
+   /:|:|  |   
+  /:/|:|  |__ 
+ /:/ |:| /\__\
+ \/__|:|/:/  /
+     |:/:/  / 
+     |::/  /  
+     /:/  /   
+     \/__/    </div>
+                </div>
+            </div>
+            <div class="description">Du hast meinen Blog gefunden! Ich habe mir vorgenommen ein Spiel zu entwickeln - Keine Ahnung wie das geht, aber ich werds schon rausfinden. Updates dazu gibt hier!</div>
+            <br><h1>~/blog</h1>
+            <nav>
+                <a href="#" class="active">home</a>
+                <a href="about.html">about</a>
+                <a href="login.html">login</a>
+            </nav>
+        </header>
+        
+        <main>
+            <section id="posts">
+                <!-- Posts will be dynamically loaded here -->
+            </section>
+        </main>
+
+        <footer>
+            <div class="social-links">
+                <a href="https://github.com" target="_blank">GitHub</a>
+                <a href="https://twitter.com" target="_blank">Twitter</a>
+                <a href="https://linkedin.com" target="_blank">LinkedIn</a>
+            </div>
+        </footer>
+    </div>
+    <script src="/js/navigation.js"></script>
+    <script src="/js/posts.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            handleNavigation();
+            if (window.location.pathname === '/' || window.location.pathname.includes('index.html')) {
+                await loadPosts();
+            }
+        });
+    </script>
+</body>
+</html>

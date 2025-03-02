@@ -1,0 +1,77 @@
+// Posts Component Styles
+// Styles for blog post listings and individual post displays
+
+@use '../base/variables' as *;
+
+// Post container
+.post {
+    max-width: 600px;  // Increased from 400px to 600px
+    margin: 0 auto 2rem auto;  // Center the post and add bottom margin
+    position: relative;
+    border: 1px solid var(--border);
+    // Separator between posts
+    &:not(:last-child)::after {
+        content: '';
+        position: absolute;
+        bottom: -1.5rem;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: var(--border);
+    }
+
+    // Post media section (images/carousel)
+    &-media {
+        margin: 0;  // Remove margin
+        width: 100%;
+        border-bottom: 1px solid var(--border);  // Add separator
+        
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+        }
+    }
+
+    // Post header section
+    &-header {
+        margin: 1rem 0;  // Consistent margin
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        padding: 0 1rem;
+    }
+
+    // Post title - now same size as text but bold
+    &-title {
+        margin: 0;
+        color: var(--fg);  // Changed from primary to normal text
+        font-size: var(--global-font-size);  // Updated to match global size
+        font-weight: bold;
+        line-height: var(--global-line-height);
+        flex: 1;
+
+    }
+
+    // Post date
+    &-date {
+        color: var(--fg-dim);
+        font-size: var(--global-font-size);  // Updated to match global size
+        margin-left: 1rem;
+        white-space: nowrap;
+    }
+
+    // Post content sections
+    &-body {
+        margin-bottom: 0.8rem;  // Reduced spacing
+        padding: 0 1rem;
+    }
+
+    &-text {
+        color: var(--fg);
+        font-size: var(--global-font-size);
+        line-height: 1.2;  // Tighter line spacing
+        font-weight: normal;  // Remove bold
+    }
+}

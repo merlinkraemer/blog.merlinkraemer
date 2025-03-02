@@ -1,0 +1,42 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# Environment variables and secrets
+.env
+.env.*
+config.js
+
+# Build/Compiled files
+public/css/*.css.map
+*.css.map
+
+# Debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+debug.log
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE/Editor folders
+.idea/
+.vscode/
+*.swp
+*.swo
+.vs/
+
+# Optional: media uploads (uncomment if you want to ignore uploaded files)
+# media/*
+
+# Application specific
+*.log
+.cache/
+dist/

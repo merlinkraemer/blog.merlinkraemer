@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terminal Blog Admin</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="terminal">
+    <!-- Modals -->
+    <!-- Media Upload Modal -->
+    <div id="mediaUploadModal" class="modal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Upload Media</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="uploadForm" class="upload-form">
+                    <input type="file" id="mediaFile" accept="image/*,.gif" multiple>
+                    <div class="upload-preview" id="uploadPreview"></div>
+                    <button type="submit" id="uploadButton">Upload Files</button>
+                </form>
+                <div id="uploadProgress" class="upload-progress"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Image Selection Modal -->
+    <div id="imageSelectModal" class="modal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Select Images</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="mediaGrid" class="media-grid">
+                    <!-- Images will be loaded here -->
+                </div>
+                <div class="modal-actions">
+                    <button id="insertSelectedImages">Insert Selected</button>
+                    <button class="close-modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <header>
+            <div class="greeting">Hi, I'm</div>
+            <div class="ascii-art">
+                <div class="letter-group">
+                    <!-- M and E -->
+                    <div class="ascii-letter">      ___     
+     /\__\    
+    /::|  |   
+   /:|:|  |   
+  /:/|:|__|__ 
+ /:/ |::::\__\
+ \/__/~~/:/  /
+       /:/  / 
+      /:/  /  
+     /:/  /   
+     \/__/    </div>
+                    <div class="ascii-letter">      ___     
+     /\  \    
+    /::\  \   
+   /:/\:\  \  
+  /::\~\:\  \ 
+ /:/\:\ \:\__\
+ \:\~\:\ \/__/
+  \:\ \:\__\  
+   \:\ \/__/  
+    \:\__\    
+     \/__/    </div>
+                </div>
+                <div class="letter-group">
+                    <!-- R and L -->
+                    <div class="ascii-letter">      ___     
+     /\  \    
+    /::\  \   
+   /:/\:\  \  
+  /::\~\:\  \ 
+ /:/\:\ \:\__\
+ \/_|::\/:/  /
+    |:|::/  / 
+    |:|\/__/  
+    |:|  |    
+     \|__|    </div>
+                    <div class="ascii-letter">      ___ 
+     /\__\
+    /:/  /
+   /:/  / 
+  /:/  /  
+ /:/__/   
+ \:\  \   
+  \:\  \  
+   \:\  \ 
+    \:\__\
+     \/__/</div>
+                </div>
+                <div class="letter-group">
+                    <!-- I and N -->
+                    <div class="ascii-letter">      ___   
+     /\  \  
+     \:\  \ 
+     /::\__\
+  __/:/\/__/
+ /\/:/  /   
+ \::/__/    
+  \:\__\    
+   \/__/    
+            
+            </div>
+                    <div class="ascii-letter">      ___     
+     /\__\    
+    /::|  |   
+   /:|:|  |   
+  /:/|:|  |__ 
+ /:/ |:| /\__\
+ \/__|:|/:/  /
+     |:/:/  / 
+     |::/  /  
+     /:/  /   
+     \/__/    </div>
+                </div>
+            </div>
+            <div class="description">Du hast meinen Blog gefunden! Ich habe mir vorgenommen ein Spiel zu entwickeln - Keine Ahnung wie das geht, aber ich werds schon rausfinden. Updates dazu gibt hier!</div>
+            <br><h1>~/blog/admin</h1>
+            <nav>
+                <a href="index.html">home</a>
+                <a href="about.html">about</a>
+                <a href="#" id="logoutButton">logout</a>
+            </nav>
+        </header>
+
+        <main>
+            <!-- Admin Toolbar -->
+            <div class="admin-toolbar">
+                <button type="button" id="manageMediaBtn">Manage Media</button>
+            </div>
+
+            <!-- Create Post Section -->
+            <div class="create-post">
+                <div class="create-post-header">
+                    <h2>Create New Post</h2>
+                </div>
+                <div class="create-post-form">
+                    <div class="post-media" id="createPostMedia"></div>
+                    <input type="text" id="newTitle" placeholder="Post title..." required>
+                    <textarea id="newContent" placeholder="What's on your mind?" required></textarea>
+                    <div class="create-post-actions">
+                        <button type="button" id="toggleImages">Add Images</button>
+                        <button type="submit" id="submitPost">Create Post</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Posts List -->
+            <div id="posts">
+                <!-- Posts will be loaded here -->
+            </div>
+
+            <div id="message"></div>
+
+        </main>
+
+        <footer>
+            <div class="social-links">
+                <a href="https://github.com" target="_blank">GitHub</a>
+                <a href="https://twitter.com" target="_blank">Twitter</a>
+                <a href="https://linkedin.com" target="_blank">LinkedIn</a>
+            </div>
+        </footer>
+    </div>
+    <script src="/js/admin.js"></script>
+</body>
+</html>

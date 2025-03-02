@@ -1,0 +1,40 @@
+// Terminal Theme Variables
+// This file defines the core design tokens for the terminal theme
+
+// Colors
+// Main terminal colors that define the overall look and feel
+$background: #282828;  // Terminal background
+$fg: rgb(191, 191, 191);         // Primary text color 
+$fg-dim: #666666;    // Secondary/dimmed text
+$link-color: #458588;   // Renamed from $primary
+$error: #fb4934;     // Error messages
+$success: #b8bb26;   // Success messages
+$border: #333333;    // Borders and dividers
+$active: #d79921;    // Active state color
+
+// Typography
+// Font settings that maintain the terminal aesthetic
+$global-font-size: 16px;  // Increased base size for better readability
+$global-line-height: 1.2;  // Reduced for tighter terminal-like spacing
+$font-stack: "Courier New", monospace;
+$global-font-weight: bold;  // Added global font weight
+
+// Export variables as CSS custom properties
+// This allows runtime access to these values in JavaScript if needed
+:root {
+    // Colors
+    --background: #{$background};
+    --fg: #{$fg};
+    --fg-dim: #{$fg-dim};
+    --link-color: #{$link-color};  // Renamed from --primary
+    --error: #{$error};
+    --success: #{$success};
+    --border: #{$border};
+    --active: #{$active};
+    
+    // Typography
+    --global-font-size: #{$global-font-size};
+    --global-line-height: #{$global-line-height};
+    --font-stack: #{$font-stack};
+    --global-font-weight: #{$global-font-weight};
+}

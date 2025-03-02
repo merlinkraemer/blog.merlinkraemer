@@ -1,0 +1,102 @@
+// Carousel Component Styles
+// Image gallery/slider with navigation controls
+
+@use '../base/variables' as *;
+
+// Main carousel container
+.carousel {
+    position: relative;
+    padding: 0;  // Remove padding
+    border: none;  // Remove border
+
+    // Navigation controls
+    &-nav {
+        padding: 0.5rem;
+        text-align: center;
+        margin-top: 0.5rem;
+        font-family: var(--font-stack);
+        color: var(--fg-dim);
+
+        // Navigation buttons
+        .prev, .next {
+            background: none;
+            border: none;
+            color: var(--fg);
+            cursor: pointer;
+            padding: 0;
+            font-family: var(--font-stack);
+        }
+
+        .carousel-counter {
+            display: inline-block;
+            min-width: 40px;
+            text-align: center;
+            margin: 0 1rem;
+        }
+
+        // Navigation buttons
+        button {
+            background: none;
+            border: none;
+            color: var(--fg);  // Changed from primary to normal text
+            cursor: pointer;
+            padding: 0;
+            font-family: var(--font-stack);
+
+            // Terminal-style navigation arrows
+            &.prev::before { content: "[<]"; }
+            &.next::before { content: "[>]"; }
+
+            // Button states
+            &:hover {
+                text-decoration: underline;
+            }
+
+            &:disabled {
+                color: var(--fg-dim);
+                cursor: not-allowed;
+                text-decoration: none;
+            }
+        }
+    }
+
+    // Hide navigation for single images
+    &-single .carousel-nav {
+        display: none;
+    }
+
+    // Image counter
+    &-counter {
+        display: inline-block;
+        min-width: 40px;
+        text-align: center;
+        margin: 0 1rem;
+    }
+
+    // Image container
+    &-images {
+        position: relative;
+        width: 100%;
+        height: 450px;  // Match new post width
+        overflow: hidden;
+        touch-action: pan-y pinch-zoom;
+        
+
+        // Individual images
+        img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: none;
+            transition: transform 0.3s ease-out;
+
+            // Active image
+            &.active {
+                display: block;
+            }
+        }
+    }
+}

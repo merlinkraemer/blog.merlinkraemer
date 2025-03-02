@@ -1,0 +1,60 @@
+// Form Component Styles
+// Styles for form elements and status messages
+
+@use '../base/variables' as *;
+
+// Text inputs and textareas
+input[type="text"],
+textarea {
+    width: 100%;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    background: var(--background);
+    color: var(--fg);
+    border: 1px solid var(--border);
+    font-family: var(--font-stack);
+
+    // Focus state
+    &:focus {
+        outline: none;
+        border-color: var(--primary);
+    }
+}
+
+// Buttons
+button {
+    // Reset button styles
+    background: none;
+    border: none;
+    padding: 0;
+    
+    // Terminal-style appearance
+    color: var(--fg);  // Changed from primary to normal text
+    cursor: pointer;
+    font-family: var(--font-stack);
+
+    // Button states
+    &:hover {
+        text-decoration: underline;
+    }
+
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    &:focus {
+        border-color: var(--fg);  // Changed from primary to normal text
+    }
+}
+
+// Status messages
+.error {
+    color: var(--error);
+    margin: 1rem 0;
+}
+
+.success {
+    color: var(--success);
+    margin: 1rem 0;
+}

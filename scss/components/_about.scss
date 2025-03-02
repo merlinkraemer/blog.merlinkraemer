@@ -1,0 +1,47 @@
+@use '../base/variables' as *;
+
+.about-content {
+    padding: 2rem 0;
+
+    .command-line {
+        display: flex;
+        align-items: center;
+        margin: 1.5rem 0 0.5rem;
+        color: var(--fg);
+        font-size: var(--global-font-size);
+
+        &:first-child {
+            margin-top: 0;
+        }
+
+        .prompt {
+            color: var(--active);
+            margin-right: 0.5rem;
+            user-select: none;
+        }
+    }
+
+    .output {
+        color: var(--fg);
+        white-space: pre-line;
+        line-height: 1.5;
+        padding-left: 1.5rem;
+        margin-bottom: 1rem;
+        font-size: var(--global-font-size);
+        a {
+            text-decoration: none;
+            color: var(--link-color);
+            &:hover {
+               text-decoration: underline;
+            }
+        }
+}
+        &.skills-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.5rem;
+            padding: 0.5rem 0 0.5rem 1.5rem;
+            white-space: nowrap;
+        }
+    
+}

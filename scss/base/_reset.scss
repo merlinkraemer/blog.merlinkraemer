@@ -1,0 +1,68 @@
+// Base Reset & Container Styles
+// Foundational styles that normalize the layout and establish base typography
+
+@use 'variables' as *;  // Import variables
+
+// Box sizing reset
+* {
+    box-sizing: border-box;
+    text-rendering: geometricPrecision;
+    font-size: var(--global-font-size);
+    font-weight: var(--global-font-weight);
+    scrollbar-width: none;  // Firefox
+    -ms-overflow-style: none;  // IE/Edge
+    
+    &::-webkit-scrollbar {
+        display: none;  // Chrome/Safari/Edge
+    }
+}
+
+// Selection styling
+::selection {
+    background: var(--fg-dim);
+    color: var(--background);
+}
+
+::-moz-selection {
+    background: var(--fg-dim);
+    color: var(--background);
+}
+
+// Base body styles
+// Sets up the terminal-like appearance
+body {
+    // Typography
+    font-size: var(--global-font-size);
+    font-family: var(--font-stack);
+    font-weight: var(--global-font-weight);  // Added global font weight
+    line-height: 1.2;  // Tighter line spacing
+    
+    // Colors
+    background: var(--background);
+    color: var(--fg);
+    
+    // Layout
+    margin: 0;
+    word-wrap: break-word;
+    overflow-y: auto;  // Changed from scroll to auto
+
+    // Transitions
+    opacity: 1;
+    transition: opacity 0.3s ease-in-out;
+
+    &.fade-out {
+        opacity: 0;
+    }
+}
+
+p {
+    margin: 0.5rem 0;  // Reduced paragraph spacing
+}
+
+// Main container
+// Centers content and sets maximum width
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 1rem;
+}

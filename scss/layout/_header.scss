@@ -1,0 +1,162 @@
+// Header Component Styles
+// Styles for the site header and navigation menu
+
+@use '../base/variables' as *;
+
+// Main header
+header {
+    margin-bottom: 2rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0.5rem;
+    min-height: 320px;  // Add fixed minimum height to prevent layout shift
+
+    .greeting {
+        font-size: var(--global-font-size);
+        color: var(--fg);
+        display: flex;
+        align-items: center;
+        margin-top: 1rem;
+        margin-bottom: 1rem;  // Add consistent margin
+
+        &::before {
+            content: "❯ ";
+            color: var(--active);
+            margin-right: 0.4em;
+        }
+    }
+
+    // ASCII art section
+    .ascii-art {
+        display: flex;
+        justify-content: flex-start;
+        width: 100%;
+        color: var(--fg);
+        margin-bottom: 1rem;
+        font-size: 12px;
+        line-height: 1.2;
+        
+        .letter-group {
+            display: flex;
+            margin-right: 0.5rem;  // Reduced spacing between groups
+        }
+        
+        .ascii-letter {
+            white-space: pre;
+            display: inline-block;
+            flex-shrink: 0;
+            margin-right: 0.25rem;  // Reduced spacing between letters
+        }
+    }
+
+    @media (max-width: 768px) {
+        .ascii-art {
+            flex-wrap: wrap;
+            font-size: 10px;
+            
+            .letter-group {
+                margin-bottom: 1rem;
+            }
+        }
+    }
+
+    .description {
+        color: var(--fg-dim);
+        margin: 2rem 0;  // Make margins consistent across pages
+        font-size: var(--global-font-size);  // Match global font size
+        max-width: fit-content;
+        font-weight: normal;  // Remove bold
+    }
+
+    // Terminal-style heading
+    h1 {
+        margin: 1rem 0;  // Add consistent margin
+        padding: 0;
+        color: var(--fg);
+        font-size: 1rem;
+        line-height: var(--global-line-height);
+        position: relative;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        user-select: none;  // Prevent text selection
+        cursor: default;    // Use default cursor
+
+        // Left side with prompt and path
+        &::before {
+            content: "❯  ";  // Fat arrow prompt
+            color: var(--active);
+            margin-right: 0.4em;
+            font-weight: bold;
+            font-size: 1rem;
+            user-select: none;  // Prevent prompt selection
+            cursor: default;    // Use default cursor
+        }
+
+        // Right side with username
+        &::after {
+            content: "root@merlinkraemer.de";
+            color: var(--fg-dim);
+            margin-left: auto;
+            font-weight: bold;  // Remove bold
+            font-size: 1rem;
+
+        }
+
+        
+    }
+
+    nav {
+        margin: 1rem 0;  // Add consistent margin
+    }
+}
+
+// Navigation menu
+nav {
+    margin-top: 1rem;
+    display: flex;
+    align-items: center;
+
+    // Navigation links
+    a {
+        font-size: var(--global-font-size);  // Match global font size
+        margin-right: 1rem;
+        color: var(--fg);  // Changed to normal text color
+        text-decoration: none;
+
+        // Terminal-style brackets around links
+        &::before {
+            content: "[";
+            color: var(--fg);
+        }
+
+        &::after {
+            content: "]";
+            color: var(--fg);
+        }
+
+        // Link states
+        &:hover {
+            text-decoration: none;
+            &::before,
+            &::after {
+                color: var(--active);  // Only brackets get active color
+                cursor: pointer;
+            }
+        }
+
+        &.active {
+            text-decoration: none;
+            &::before,
+            &::after {
+                color: var(--active);  // Only brackets get active color
+            }
+        }
+
+        // Special case for admin, login, and logout links
+        &[href="admin.html"],
+        &[href="login.html"],
+        &#logoutButton {
+            margin-left: auto;  // Push admin/login/logout to the right
+        }
+    }
+}
