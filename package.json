@@ -2,10 +2,14 @@
   "name": "gamedev_blog_terminal",
   "version": "1.0.0",
   "description": "A simple terminal-themed game development blog",
-  "main": "server.js",
+  "main": "src/server/server.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "concurrently \"sass --watch scss/main.scss:public/css/style.css --no-source-map --poll\" \"nodemon server.js\" \"browser-sync start --proxy 'localhost:3001' --files 'public/css/*.css, *.html' --port 3000 --ui-port 3002\""
+    "start": "node src/server/server.js",
+    "dev:server": "nodemon src/server/server.js",
+    "dev:sass": "sass --watch src/client/scss/main.scss:public/css/style.css --no-source-map --poll",
+    "dev:sync": "browser-sync start --proxy 'localhost:3001' --files 'public/css/*.css, public/*.html' --port 3000 --ui-port 3002",
+    "dev": "concurrently \"npm run dev:sass\" \"npm run dev:server\" \"npm run dev:sync\"",
+    "build": "sass src/client/scss/main.scss:public/css/style.css --no-source-map --style compressed"
   },
   "dependencies": {
     "dotenv": "^16.4.7",

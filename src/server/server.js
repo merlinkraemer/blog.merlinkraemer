@@ -15,14 +15,11 @@ app.use(session({
 }));
 
 // Serve static files
-app.use('/css', express.static('public/css'));
-app.use('/js', express.static('js'));
-app.use('/media', express.static('media'));
-app.use(express.static(__dirname));
+app.use(express.static(path.join(__dirname, '../../public')));
 
 // File upload setup
 const upload = multer({
-    dest: 'media/',
+    dest: path.join(__dirname, '../../public/media/'),
     limits: { fileSize: 5 * 1024 * 1024 }, // 5MB
     fileFilter: (req, file, cb) => {
         if (file.mimetype.startsWith('image/')) {
@@ -58,7 +55,7 @@ app.post('/api/auth/logout', (req, res) => {
 // Blog posts
 app.get('/api/posts', async (req, res) => {
     try {
-        const data = await fs.readFile('posts.json', 'utf8')
+        const data = await fs.readFile(path.join(__dirname, '../../config/posts.json'), 'utf8')
             .then(JSON.parse)
             .catch(() => ({ posts: [] }));
         res.json(data);
@@ -70,7 +67,7 @@ app.get('/api/posts', async (req, res) => {
 app.post('/api/posts', checkAuth, async (req, res) => {
     try {
         const { title, content, images } = req.body;
-        const data = await fs.readFile('posts.json', 'utf8')
+        const data = await fs.readFile(path.join(__dirname, '../../config/posts.json'), 'utf8')
             .then(JSON.parse)
             .catch(() => ({ posts: [] }));
 
@@ -82,7 +79,7 @@ app.post('/api/posts', checkAuth, async (req, res) => {
             media: images?.map(path => ({ type: 'image', path })) || []
         });
 
-        await fs.writeFile('posts.json', JSON.stringify(data, null, 2));
+        await fs.writeFile(path.join(__dirname, '../../config/posts.json'), JSON.stringify(data, null, 2));
         res.json({ success: true });
     } catch (err) {
         res.status(500).json({ error: 'Could not save post' });
@@ -91,12 +88,12 @@ app.post('/api/posts', checkAuth, async (req, res) => {
 
 app.delete('/api/posts/:id', checkAuth, async (req, res) => {
     try {
-        const data = await fs.readFile('posts.json', 'utf8')
+        const data = await fs.readFile(path.join(__dirname, '../../config/posts.json'), 'utf8')
             .then(JSON.parse)
             .catch(() => ({ posts: [] }));
 
         data.posts = data.posts.filter(post => post.id !== req.params.id);
-        await fs.writeFile('posts.json', JSON.stringify(data, null, 2));
+        await fs.writeFile(path.join(__dirname, '../../config/posts.json'), JSON.stringify(data, null, 2));
         res.json({ success: true });
     } catch (err) {
         res.status(500).json({ error: 'Could not delete post' });
@@ -107,8 +104,8 @@ app.delete('/api/posts/:id', checkAuth, async (req, res) => {
 app.post('/api/upload', checkAuth, upload.array('files'), (req, res) => {
     res.json({
         files: req.files.map(f => ({
-            path: `media/${f.filename}`,
-            url: `media/${f.filename}`
+            path: `/media/${f.filename}`,
+            url: `/media/${f.filename}`
         }))
     });
 });
