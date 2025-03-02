@@ -82,19 +82,7 @@ nav {
             color: var(--fg);
         }
 
-        .close-modal {
-            background: none;
-            border: none !important;
-            color: var(--fg);
-            font-size: 1.5rem;
-            cursor: pointer;
-            padding: 0.25rem !important;
-            min-width: auto !important;
-
-            &:hover {
-                color: var(--error);
-            }
-        }
+       
     }
 
     .modal-actions {
@@ -117,19 +105,13 @@ nav {
 
 // Base button styles
 button {
-    padding: 0.5rem 1rem;
-    background: none;
-    border: 1px solid var(--border);
+        background: none;
     color: var(--fg);
     cursor: pointer;
     transition: all 0.2s ease;
-    min-width: 80px;
     text-align: center;
 
-    &:hover {
-        border-color: var(--active);
-        color: var(--active);
-    }
+ 
 
     // Special style for non-modal buttons
     &:not(.modal button):not(.form-actions button) {
@@ -235,7 +217,10 @@ textarea {
     display: flex;
     gap: 1rem;
     margin-top: 1rem;
+    padding: 1rem;
 }
+
+
 
 // Create post section
 .create-post {
@@ -287,9 +272,8 @@ textarea {
             display: flex;
             justify-content: flex-end;
             gap: 1rem;
-            margin-top: 2rem;
             padding-top: 1rem;
-            border-top: 1px solid var(--border);
+
         }
     }
 }

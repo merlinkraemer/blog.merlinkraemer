@@ -117,46 +117,46 @@ nav {
     align-items: center;
 
     // Navigation links
-    a {
-        font-size: var(--global-font-size);  // Match global font size
-        margin-right: 1rem;
-        color: var(--fg);  // Changed to normal text color
+}
+a, button {
+    font-size: var(--global-font-size);  // Match global font size
+    margin-right: 1rem;
+    color: var(--fg);  // Changed to normal text color
+    text-decoration: none;
+
+    // Terminal-style brackets around links
+    &::before {
+        content: "[";
+        color: var(--fg);
+    }
+
+    &::after {
+        content: "]";
+        color: var(--fg);
+    }
+
+    // Link states
+    &:hover {
         text-decoration: none;
-
-        // Terminal-style brackets around links
-        &::before {
-            content: "[";
-            color: var(--fg);
-        }
-
+        &::before,
         &::after {
-            content: "]";
-            color: var(--fg);
+            color: var(--active);  // Only brackets get active color
+            cursor: pointer;
         }
+    }
 
-        // Link states
-        &:hover {
-            text-decoration: none;
-            &::before,
-            &::after {
-                color: var(--active);  // Only brackets get active color
-                cursor: pointer;
-            }
+    &.active {
+        text-decoration: none;
+        &::before,
+        &::after {
+            color: var(--active);  // Only brackets get active color
         }
+    }
 
-        &.active {
-            text-decoration: none;
-            &::before,
-            &::after {
-                color: var(--active);  // Only brackets get active color
-            }
-        }
-
-        // Special case for admin, login, and logout links
-        &[href="admin.html"],
-        &[href="login.html"],
-        &#logoutButton {
-            margin-left: auto;  // Push admin/login/logout to the right
-        }
+    // Special case for admin, login, and logout links
+    &[href="admin.html"],
+    &[href="login.html"],
+    &#logoutButton {
+        margin-left: auto;  // Push admin/login/logout to the right
     }
 }
